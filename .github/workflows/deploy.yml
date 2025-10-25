@@ -42,11 +42,11 @@ jobs:
         run: |
           VERSION=${{ steps.version.outputs.version }}
           ARCH="x86_64-unknown-linux-gnu"
-          URL="https://github.com/vrypan/bckt/releases/download/${VERSION}/bckt-${ARCH}.tar.gz"
+          URL="https://github.com/vrypan/bckt/releases/download/${VERSION}/bckt-${ARCH}.tar.xz"
 
           echo "Downloading bckt from: $URL"
-          curl -L -o bckt.tar.gz "$URL"
-          tar -xzf bckt.tar.gz
+          curl -L -o bckt.tar.xz "$URL"
+          tar -xJf bckt.tar.xz
           chmod +x bckt bckt-new bckt-fc
           sudo mv bckt bckt-new bckt-fc /usr/local/bin/
 
