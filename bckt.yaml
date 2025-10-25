@@ -1,0 +1,9 @@
+title: "My Blog"
+description: "A blog powered by bckt and GitHub Pages"
+open_graph_image: "/open-graph.png"
+base_url: "https://yourusername.github.io/your-repo-name"
+homepage_posts: 20
+date_format: "[year]-[month]-[day]"
+paginate_tags: true
+default_timezone: "+00:00"
+theme: bckt3
