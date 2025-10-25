@@ -1,0 +1,65 @@
+title: My Blog
+base_url: https://vrypan.github.io/bckt-blog-template
+homepage_posts: 20
+date_format: '[year]-[month]-[day]'
+paginate_tags: true
+default_timezone: +00:00
+theme: bckt3
+search:
+  asset_path: assets/search/search-index.json
+  default_language: en
+  languages:
+  - id: en
+    name: English
+    stopwords:
+    - a
+    - an
+    - and
+    - are
+    - as
+    - at
+    - be
+    - but
+    - by
+    - for
+    - from
+    - has
+    - have
+    - in
+    - is
+    - it
+    - of
+    - on
+    - or
+    - that
+    - the
+    - to
+    - was
+    - were
+    - will
+    - with
+    - you
+    - your
+    - about
+    - into
+    - more
+    - can
+    - do
+    - just
+    - like
+    - not
+    - only
+    - out
+    - some
+    - than
+    - then
+    - there
+    - this
+    - up
+    - what
+    - when
+    - who
+    - why
+  payload_fields: []
+description: A blog powered by bckt and GitHub Pages
+open_graph_image: /open-graph.png
