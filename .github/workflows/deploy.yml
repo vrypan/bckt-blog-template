@@ -69,21 +69,24 @@ jobs:
             echo "bckt.yaml already exists, skipping creation"
           fi
 
-      - name: Commit bckt.yaml if created
+      - name: Commit bckt.yaml and theme files if created
         run: |
-          if [ -f "bckt.yaml" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add bckt.yaml
-            if git diff --staged --quiet; then
-              echo "No changes to commit"
-            else
-              git commit -m "Auto-generated bckt.yaml from template
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-🤖 Generated with GitHub Actions"
-              git push
-              echo "bckt.yaml committed and pushed"
-            fi
+          # Add bckt.yaml and theme directories if they exist
+          [ -f "bckt.yaml" ] && git add bckt.yaml
+          [ -d "pages" ] && git add pages/
+          [ -d "skel" ] && git add skel/
+          [ -d "templates" ] && git add templates/
+          [ -d "themes" ] && git add themes/
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-generated bckt.yaml and theme files from template"
+            git push
+            echo "Files committed and pushed"
           fi
 
       - name: Download bckt3 theme (first time only)
