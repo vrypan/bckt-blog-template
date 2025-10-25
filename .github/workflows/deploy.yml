@@ -69,7 +69,20 @@ jobs:
             echo "bckt.yaml already exists, skipping creation"
           fi
 
-      - name: Commit bckt.yaml and theme files if created
+      - name: Download bckt3 theme (first time only)
+        run: |
+          if [ ! -d "templates" ] && [ ! -d "skel" ] && [ ! -d "pages" ]; then
+            echo "Theme directories not found, downloading bckt3 theme..."
+            bckt themes download --github vrypan/bckt/themes bckt3 --force
+            bckt themes use bckt3 --force
+          else
+            echo "Theme already set up, skipping download"
+          fi
+
+      - name: Render site
+        run: bckt render
+
+      - name: Commit bckt.yaml and theme files if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -88,19 +101,6 @@ jobs:
             git push
             echo "Files committed and pushed"
           fi
-
-      - name: Download bckt3 theme (first time only)
-        run: |
-          if [ ! -d "templates" ] && [ ! -d "skel" ] && [ ! -d "pages" ]; then
-            echo "Theme directories not found, downloading bckt3 theme..."
-            bckt themes download --github vrypan/bckt/themes bckt3 --force
-            bckt themes use bckt3 --force
-          else
-            echo "Theme already set up, skipping download"
-          fi
-
-      - name: Render site
-        run: bckt render
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
