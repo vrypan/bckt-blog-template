@@ -113,17 +113,48 @@ The default theme is `bckt3`. You can customize it by editing files in the `them
 
 ### Custom Domain
 
-To use a custom domain:
+You can use your own domain instead of `username.github.io`. Here's how:
 
-1. Add a `CNAME` file to the `skel/` directory with your domain:
-   ```bash
-   echo "blog.yourdomain.com" > skel/CNAME
-   ```
+#### 1. Add CNAME File
 
-2. Configure DNS:
-   - Add a CNAME record pointing to `yourusername.github.io`
+```bash
+echo "blog.yourdomain.com" > skel/CNAME
+git add skel/CNAME
+git commit -m "Add custom domain"
+git push
+```
 
-3. In GitHub Settings → Pages, add your custom domain
+#### 2. Configure DNS
+
+**For subdomain** (e.g., `blog.yourdomain.com`):
+
+Add a CNAME record in your DNS provider:
+- Type: `CNAME`
+- Name: `blog`
+- Value: `yourusername.github.io`
+
+**For apex domain** (e.g., `yourdomain.com`):
+
+Add A records pointing to GitHub's IPs:
+- `185.199.108.153`
+- `185.199.109.153`
+- `185.199.110.153`
+- `185.199.111.153`
+
+#### 3. Configure in GitHub
+
+1. Repository **Settings** → **Pages**
+2. Under **Custom domain**, enter your domain
+3. Click **Save** and wait for DNS check
+4. Enable **"Enforce HTTPS"**
+
+#### 4. Update bckt.yaml
+
+```yaml
+base_url: "https://blog.yourdomain.com"
+```
+
+**Detailed instructions:** See [Custom Domain Setup](https://github.com/vrypan/bckt/blob/main/docs/github-pages-setup.md#custom-domain) for provider-specific DNS configuration and troubleshooting.
 
 ## Version Pinning
 
