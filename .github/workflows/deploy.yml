@@ -63,6 +63,22 @@ jobs:
             echo "Theme already set up, skipping download"
           fi
 
+      - name: Create bckt.yaml from template
+        run: |
+          if [ ! -f "bckt.yaml" ] && [ -f "bckt.yaml.example" ]; then
+            echo "Creating bckt.yaml from template..."
+            # Extract owner and repo name from GITHUB_REPOSITORY
+            OWNER=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+            REPO=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+            BASE_URL="https://${OWNER}.github.io/${REPO}"
+
+            # Create bckt.yaml with the correct base_url
+            sed "s|base_url: .*|base_url: $BASE_URL|" bckt.yaml.example > bckt.yaml
+            echo "Created bckt.yaml with base_url: $BASE_URL"
+          else
+            echo "bckt.yaml already exists, skipping creation"
+          fi
+
       - name: Render site
         run: bckt render
 
