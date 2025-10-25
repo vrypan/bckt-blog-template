@@ -46,7 +46,7 @@ jobs:
 
           echo "Downloading bckt from: $URL"
           curl -L -o bckt.tar.xz "$URL"
-          tar -xJf bckt.tar.xz
+          tar -xJf bckt.tar.xz --strip-components=1
           chmod +x bckt bckt-new bckt-fc
           sudo mv bckt bckt-new bckt-fc /usr/local/bin/
 
