@@ -1,7 +1,7 @@
 ---
 title: "Posting from issues"
 slug: "issue-to-post"
-date: "2025-10-26:00:00Z"
+date: "2025-10-26T23:00:00Z"
 tags:
   - github-pages
 abstract: "Converting GitHub issies to posts"
