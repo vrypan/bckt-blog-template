@@ -53,16 +53,6 @@ jobs:
           echo "bckt version:"
           bckt --version
 
-      - name: Download bckt3 theme (first time only)
-        run: |
-          if [ ! -d "templates" ] && [ ! -d "skel" ] && [ ! -d "pages" ]; then
-            echo "Theme directories not found, downloading bckt3 theme..."
-            bckt themes download --github vrypan/bckt/themes bckt3 --force
-            bckt themes use bckt3 --force
-          else
-            echo "Theme already set up, skipping download"
-          fi
-
       - name: Create bckt.yaml from template
         run: |
           if [ ! -f "bckt.yaml" ] && [ -f "bckt.yaml.example" ]; then
@@ -77,6 +67,16 @@ jobs:
             echo "Created bckt.yaml with base_url: $BASE_URL"
           else
             echo "bckt.yaml already exists, skipping creation"
+          fi
+
+      - name: Download bckt3 theme (first time only)
+        run: |
+          if [ ! -d "templates" ] && [ ! -d "skel" ] && [ ! -d "pages" ]; then
+            echo "Theme directories not found, downloading bckt3 theme..."
+            bckt themes download --github vrypan/bckt/themes bckt3 --force
+            bckt themes use bckt3 --force
+          else
+            echo "Theme already set up, skipping download"
           fi
 
       - name: Render site
