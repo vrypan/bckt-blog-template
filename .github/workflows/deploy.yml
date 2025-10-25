@@ -8,7 +8,7 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -67,6 +67,23 @@ jobs:
             echo "Created bckt.yaml with base_url: $BASE_URL"
           else
             echo "bckt.yaml already exists, skipping creation"
+          fi
+
+      - name: Commit bckt.yaml if created
+        run: |
+          if [ -f "bckt.yaml" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add bckt.yaml
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "Auto-generated bckt.yaml from template
+
+🤖 Generated with GitHub Actions"
+              git push
+              echo "bckt.yaml committed and pushed"
+            fi
           fi
 
       - name: Download bckt3 theme (first time only)
