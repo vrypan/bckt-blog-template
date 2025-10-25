@@ -53,6 +53,16 @@ jobs:
           echo "bckt version:"
           bckt --version
 
+      - name: Download bckt3 theme (first time only)
+        run: |
+          if [ ! -d "templates" ] && [ ! -d "skel" ] && [ ! -d "pages" ]; then
+            echo "Theme directories not found, downloading bckt3 theme..."
+            bckt themes download --github vrypan/bckt/themes bckt3 --force
+            bckt themes use bckt3 --force
+          else
+            echo "Theme already set up, skipping download"
+          fi
+
       - name: Render site
         run: bckt render
 
