@@ -1,9 +1,114 @@
-title: "My Blog"
-description: "A blog powered by bckt and GitHub Pages"
-open_graph_image: "/open-graph.png"
-base_url: "https://yourusername.github.io/your-repo-name"
+title: My Blog
+base_url: https://yourusername.github.io/your-repo-name
 homepage_posts: 20
-date_format: "[year]-[month]-[day]"
+date_format: '[year]-[month]-[day]'
 paginate_tags: true
-default_timezone: "+00:00"
+default_timezone: +00:00
 theme: bckt3
+search:
+  asset_path: assets/search/search-index.json
+  default_language: en
+  languages:
+  - id: en
+    name: English
+    stopwords:
+    - a
+    - an
+    - and
+    - are
+    - as
+    - at
+    - be
+    - but
+    - by
+    - for
+    - from
+    - has
+    - have
+    - in
+    - is
+    - it
+    - of
+    - on
+    - or
+    - that
+    - the
+    - to
+    - was
+    - were
+    - will
+    - with
+    - you
+    - your
+    - about
+    - into
+    - more
+    - can
+    - do
+    - just
+    - like
+    - not
+    - only
+    - out
+    - some
+    - than
+    - then
+    - there
+    - this
+    - up
+    - what
+    - when
+    - who
+    - why
+  - id: el
+    name: Greek
+    stopwords:
+    - και
+    - να
+    - σε
+    - το
+    - η
+    - ο
+    - οι
+    - τα
+    - για
+    - με
+    - που
+    - ως
+    - από
+    - αυτο
+    - αυτά
+    - αυτή
+    - αυτό
+    - αυτές
+    - αυτοί
+    - αυτών
+    - είναι
+    - στο
+    - στη
+    - στην
+    - στον
+    - τους
+    - τις
+    - των
+    - μια
+    - μιας
+    - μιαν
+    - μου
+    - σου
+    - του
+    - της
+    - μας
+    - σας
+    - αν
+    - θα
+    - δε
+    - δεν
+    - πως
+    - ότι
+    - όπως
+    - όταν
+    - όσο
+  payload_fields: []
+description: A blog powered by bckt and GitHub Pages
+open_graph_image: /open-graph.png
