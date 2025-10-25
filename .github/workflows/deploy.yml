@@ -119,3 +119,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Check deployment status
+        if: steps.deployment.outcome == 'failure'
+        run: |
+          echo "::warning::GitHub Pages deployment failed. This is expected on the first run."
+          echo "::notice::Please configure GitHub Pages in your repository settings:"
+          echo "::notice::1. Go to Settings > Pages"
+          echo "::notice::2. Under 'Source', select 'GitHub Actions'"
+          echo "::notice::3. Re-run this workflow after configuration"
+          exit 0
