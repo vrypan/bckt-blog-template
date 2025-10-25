@@ -1,0 +1,96 @@
+name: Convert Issue to Post
+
+on:
+  issues:
+    types: [labeled, edited]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'publish')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r .github/scripts/requirements.txt
+
+      - name: Convert issue to post
+        env:
+          ISSUE_JSON: ${{ toJSON(github.event.issue) }}
+        run: python .github/scripts/issue_to_post.py
+
+      - name: Commit and push post
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Add the entire post directory (handles new files, modifications, and deletions)
+          git add "$POST_FOLDER"
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Published post from issue #${ISSUE_NUMBER}" -m "${ISSUE_TITLE}"
+            git push
+            echo "Post committed and pushed"
+            echo "CHANGES_COMMITTED=true" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger deploy workflow
+        if: env.CHANGES_COMMITTED == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            });
+            console.log('Deploy workflow triggered');
+
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const created_date = '${{ github.event.issue.created_at }}'.split('T')[0];
+            const year = created_date.split('-')[0];
+            const slug = '${{ github.event.issue.title }}'.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            const post_path = `${year}/${created_date}-${slug}`;
+
+            // Read base_url from bckt.yaml if it exists
+            let base_url = 'https://your-site.github.io/your-repo';
+            try {
+              const fs = require('fs');
+              const yaml = require('js-yaml');
+              if (fs.existsSync('bckt.yaml')) {
+                const config = yaml.load(fs.readFileSync('bckt.yaml', 'utf8'));
+                base_url = config.base_url || base_url;
+              }
+            } catch (e) {
+              console.log('Could not read bckt.yaml:', e.message);
+            }
+
+            const post_url = `${base_url}/${post_path}`;
+
+            await github.rest.issues.createComment({
+              issue_number: issue_number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Published as blog post: ${post_url}\n\nEdit this issue to update the post.`
+            });
