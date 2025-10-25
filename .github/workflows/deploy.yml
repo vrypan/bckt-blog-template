@@ -93,6 +93,7 @@ jobs:
           [ -d "pages" ] && git add pages/
           [ -d "skel" ] && git add skel/
           [ -d "templates" ] && git add templates/
+          [ -d "assets" ] && git add assets/
           [ -d "themes" ] && git add themes/
 
           if git diff --staged --quiet; then
