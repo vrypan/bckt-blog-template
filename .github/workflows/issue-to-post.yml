@@ -69,9 +69,9 @@ jobs:
           script: |
             const issue_number = context.issue.number;
             const created_date = '${{ github.event.issue.created_at }}'.split('T')[0];
-            const year = created_date.split('-')[0];
+            const [year, month, day] = created_date.split('-');
             const slug = '${{ github.event.issue.title }}'.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            const post_path = `${year}/${created_date}-${slug}`;
+            const post_path = `${year}/${month}/${day}/${slug}`;
 
             // Read base_url from bckt.yaml if it exists
             let base_url = 'https://your-site.github.io/your-repo';

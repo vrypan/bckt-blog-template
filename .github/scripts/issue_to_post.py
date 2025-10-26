@@ -132,7 +132,8 @@ def process_images(body: str, post_folder: Path) -> Tuple[str, List[str]]:
 def create_post_frontmatter(
     issue: Dict,
     custom_frontmatter: Optional[Dict],
-    attached_files: List[str]
+    attached_files: List[str],
+    slug: str
 ) -> Dict:
     """
     Create the post frontmatter by merging auto-generated and custom fields.
@@ -142,7 +143,8 @@ def create_post_frontmatter(
         'title': issue['title'],
         'date': issue['created_at'],
         'author': issue['user']['login'],
-        'issue': issue['number']
+        'issue': issue['number'],
+        'slug': slug
     }
 
     # Extract tags from labels (excluding 'publish')
@@ -195,12 +197,12 @@ def main():
     # Extract date components for folder structure
     created_at = datetime.fromisoformat(issue['created_at'].replace('Z', '+00:00'))
     year = created_at.strftime('%Y')
-    date_prefix = created_at.strftime('%Y-%m-%d')
+    date_prefix = created_at.strftime('%y%m%d')
 
     # Create slug from title
     slug = slugify(issue['title'])
 
-    # Create post folder: posts/YYYY/YYYY-MM-DD-slug/
+    # Create post folder: posts/YYYY/YYMMDD-slug/
     post_folder = Path('posts') / year / f"{date_prefix}-{slug}"
     post_folder.mkdir(parents=True, exist_ok=True)
 
@@ -214,7 +216,7 @@ def main():
     body, image_filenames = process_images(body, post_folder)
 
     # Create frontmatter
-    frontmatter = create_post_frontmatter(issue, custom_frontmatter, image_filenames)
+    frontmatter = create_post_frontmatter(issue, custom_frontmatter, image_filenames, slug)
 
     # Write post
     write_post(post_folder, frontmatter, body)
