@@ -74,16 +74,27 @@ jobs:
             const post_path = `${year}/${month}/${day}/${slug}`;
 
             // Read base_url from bckt.yaml if it exists
-            let base_url = 'https://your-site.github.io/your-repo';
+            let base_url = `https://${context.repo.owner}.github.io/${context.repo.repo}`;
             try {
               const fs = require('fs');
               const yaml = require('js-yaml');
+              console.log('Checking for bckt.yaml...');
               if (fs.existsSync('bckt.yaml')) {
-                const config = yaml.load(fs.readFileSync('bckt.yaml', 'utf8'));
-                base_url = config.base_url || base_url;
+                console.log('bckt.yaml exists, reading...');
+                const fileContent = fs.readFileSync('bckt.yaml', 'utf8');
+                console.log('File content:', fileContent);
+                const config = yaml.load(fileContent);
+                console.log('Parsed config:', config);
+                if (config.base_url) {
+                  base_url = config.base_url;
+                  console.log('Using base_url from config:', base_url);
+                }
+              } else {
+                console.log('bckt.yaml not found, using default GitHub Pages URL');
               }
             } catch (e) {
-              console.log('Could not read bckt.yaml:', e.message);
+              console.log('Error reading bckt.yaml:', e.message);
+              console.log('Using default GitHub Pages URL');
             }
 
             const post_url = `${base_url}/${post_path}`;
